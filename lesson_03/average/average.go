@@ -58,6 +58,7 @@ func GetAverage(inData interface{}) (float64, ReturnCode) {
 }
 
 func SliceTest() {
+	fmt.Println("Slices Test")
 
 	// Supported Type
 	int_arr := [2]int{1, 2}
