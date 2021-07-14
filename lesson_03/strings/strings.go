@@ -22,6 +22,7 @@ func Max(inStrings []string) string {
 
 func Reverse(inStrings []string) []string {
 	var out []string
+
 	for i := len(inStrings) - 1; i >= 0; i-- {
 		out = append(out, inStrings[i])
 	}

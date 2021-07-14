@@ -24,24 +24,29 @@ func isNumericKind(kind reflect.Kind) bool {
 	}
 }
 
+// GetAverage takes any kind of slice or array
+// for numeric types it calculates an average value of all items
+// Returns 0, Error in case of unsupported data types
+// Returns average value, Success in other cases
 func GetAverage(inData interface{}) (float64, ReturnCode) {
 	if inData == nil {
 		fmt.Printf("Error! Not initialized container!\n")
 		return -1, Error
 	}
 
-	isNumeric := isNumericKind(reflect.TypeOf(inData).Elem().Kind())
-	if !isNumeric {
-		fmt.Printf("Error! Not supported type %s !\n", reflect.TypeOf(inData).Elem().Kind().String())
-		return -1, Error
-	}
-
 	switch reflect.TypeOf(inData).Kind() {
-	case reflect.Slice, reflect.Ptr:
+	case reflect.Slice, reflect.Ptr, reflect.Array:
+
+		isNumeric := isNumericKind(reflect.TypeOf(inData).Elem().Kind())
+		if !isNumeric {
+			fmt.Printf("Error! Not supported type %s !\n", reflect.TypeOf(inData).Elem().Kind().String())
+			return .0, Error
+		}
+
 		values := reflect.Indirect(reflect.ValueOf(inData))
 
 		if values.Len() == 0 {
-			return 0, Success
+			return .0, Success
 		}
 
 		sum := .0
@@ -54,16 +59,21 @@ func GetAverage(inData interface{}) (float64, ReturnCode) {
 		return sum / float64(lenght), Success
 	}
 
-	return -1, Error
+	return .0, Error
 }
 
-func SliceTest() {
+func TestSlice() {
 	fmt.Println("Slices Test")
 
 	// Supported Type
 	int_arr := [2]int{1, 2}
 	avg_arr, err_arr := GetAverage(int_arr)
-	fmt.Println(avg_arr, err_arr)
+	fmt.Println(err_arr, avg_arr)
+
+	// Unsupported Type
+	str_arr := [2]string{"1", "2"}
+	avg_str, err_str := GetAverage(str_arr)
+	fmt.Println(err_str, avg_str)
 
 	// Supported Type
 	int_slice := []int32{1, 2}
