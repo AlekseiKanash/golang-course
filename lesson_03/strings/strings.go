@@ -2,7 +2,7 @@ package strings
 
 import "fmt"
 
-func Max(inStrings []string) string {
+func max(inStrings []string) string {
 	if 0 == len(inStrings) || nil == inStrings {
 		fmt.Printf("Error, Empty slice.\n")
 		return ""
@@ -33,15 +33,15 @@ func Reverse(inStrings []string) []string {
 func TestStrings() {
 	fmt.Println("Strings Test")
 	// valid
-	longestString := Max([]string{"one", "two", "three"})
+	longestString := max([]string{"one", "two", "three"})
 	fmt.Println(longestString)
 
 	// valid
-	longestString = Max([]string{"one", "two"})
+	longestString = max([]string{"one", "two"})
 	fmt.Println(longestString)
 
 	// invalid
-	longestString = Max([]string{})
+	longestString = max([]string{})
 	fmt.Println(longestString)
 
 	inverted := Reverse([]string{"one", "two"})

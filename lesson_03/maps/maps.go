@@ -12,9 +12,7 @@ func sortData(data map[int]string) []string {
 		keys = append(keys, k)
 	}
 
-	sort.Slice(keys, func(i, j int) bool {
-		return keys[i] < keys[j]
-	})
+	sort.Ints(keys)
 
 	for _, k := range keys {
 		out = append(out, data[k])
