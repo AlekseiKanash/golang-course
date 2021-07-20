@@ -23,7 +23,7 @@ func (c Circle) Perimeter() float64 {
 }
 
 func (c Circle) String() string {
-	return fmt.Sprintf("Circle: radius: %.2f\nArea: %.2f\nPerimeter %.2f", c.Radius, c.Area(), c.Perimeter())
+	return fmt.Sprintf("Circle: radius %.2f", c.Radius)
 }
 
 type Rectangle struct {
@@ -40,9 +40,11 @@ func (r Rectangle) Perimeter() float64 {
 }
 
 func (r Rectangle) String() string {
-	return fmt.Sprintf("Rectangle with height %.2f and width %.2f\nArea: %.2f\nPerimeter: %.2f", r.Height, r.Width, r.Area(), r.Perimeter())
+	return fmt.Sprintf("Rectangle with height %.2f and width %.2f", r.Height, r.Width)
 }
 
 func DescribeShape(s Shape) {
 	fmt.Println(s)
+	fmt.Printf("Area: %.2f\n", s.Area())
+	fmt.Printf("Perimeter: %.2f\n", s.Perimeter())
 }
