@@ -15,11 +15,11 @@ type Circle struct {
 }
 
 func (c Circle) Area() float64 {
-	return math.Pi * math.Pow(c.Radius, 2)
+	return math.Pi * math.Pow(math.Max(.0, c.Radius), 2)
 }
 
 func (c Circle) Perimeter() float64 {
-	return 2 * math.Pi * c.Radius
+	return 2 * math.Pi * math.Max(.0, c.Radius)
 }
 
 func (c Circle) String() string {
@@ -32,11 +32,11 @@ type Rectangle struct {
 }
 
 func (r Rectangle) Area() float64 {
-	return r.Height * r.Width
+	return math.Max(.0, r.Height) * math.Max(.0, r.Width)
 }
 
 func (r Rectangle) Perimeter() float64 {
-	return 2*r.Height + 2*r.Width
+	return math.Max(.0, 2*r.Height) + math.Max(.0, 2*r.Width)
 }
 
 func (r Rectangle) String() string {
