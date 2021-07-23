@@ -6,16 +6,8 @@ import (
 	"net/http"
 )
 
-type JsonData struct {
-	Host      string
-	UserAgent string
-	Url       string
-	Headers   http.Header
-}
-
 func headers(w http.ResponseWriter, req *http.Request) {
-	url := fmt.Sprintf("%s%s", req.Host, req.URL.Path)
-	jdata := JsonData{Host: req.Host, Headers: req.Header, UserAgent: req.UserAgent(), Url: url}
+	jdata := map[string]interface{}{"headers": req.Header, "user_agent": req.UserAgent(), "uri": req.RequestURI, "host": req.Host}
 	str, err := json.MarshalIndent(jdata, "", "    ")
 	if err != nil {
 		fmt.Printf("Error in json.Marshall: %v", err)
