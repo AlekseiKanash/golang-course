@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -16,7 +17,7 @@ func headers(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+	fmt.Println("Running HTTP Listen server on 127.0.0.1:8090")
 	http.HandleFunc("/", headers)
-
-	http.ListenAndServe(":8090", nil)
+	log.Fatal(http.ListenAndServe(":8090", nil))
 }

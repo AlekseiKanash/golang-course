@@ -50,6 +50,7 @@ func userHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	fmt.Println("Running HTTP Listen server on 127.0.0.1:8090")
 	http.HandleFunc("/", userHandler)
 	log.Fatal(http.ListenAndServe(":8090", nil))
 }
