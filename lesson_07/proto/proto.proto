@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option go_package = "proto/pb";
+
+service Echo {
+    rpc SayHello(Message) returns (Message) {}
+    rpc Register(RegisterRequest) returns (RegisterResponse) {}
+    rpc List(Empty) returns (ListResponse) {}
+}
+
+message Empty {
+
+}
+
+message RpcGeneralError {
+    string body = 1;
+}
+
+message Message {
+    string body = 1;
+}
+
+message RegisterRequest {
+    string body = 1;
+}
+
+message RegisterResponse {
+    uint32 id = 1;
+    RpcGeneralError error = 2;
+}
+
+message ListResponse {
+    map<uint32, string> records = 1;
+}
