@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/AlekseiKanash/golang-course/lesson_08/web/rest"
+	"github.com/AlekseiKanash/golang-course/lesson_08/web/src/rest"
 )
 
 func getInput(input chan string) int {
