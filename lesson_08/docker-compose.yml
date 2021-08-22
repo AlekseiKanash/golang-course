@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  web:
+    image: "alekseikanash/web_service"
+    ports:
+      - "8080:80"
+  store:
+    image: "alekseikanash/store_service"
+    ports:
+      - "9000:9000"

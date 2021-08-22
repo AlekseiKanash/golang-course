@@ -10,6 +10,6 @@ cp ../generate_proto.sh build
 
 docker rmi store_service
 docker build \
-         -t store_service .
+         -t alekseikanash/store_service .
 
 rm -rf build
