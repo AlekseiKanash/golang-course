@@ -17,47 +17,14 @@ type Server struct {
 	server    *grpc.Server
 	wg        *sync.WaitGroup
 	isInit    bool
-	data      map[uint32]string
+	data      []pb.SaveRequest
 }
 
-type ServerRegisterError struct {
-	Message string
-}
+func (s *Server) Save(ctx context.Context, in *pb.SaveRequest) (*pb.SaveResponse, error) {
 
-func (sr ServerRegisterError) String() string {
-	return fmt.Sprintf("%s", sr.Message)
-}
-
-func (s *Server) hasValue(value string) (uint32, bool) {
-	for n, x := range s.data {
-		if x == value {
-			return n, true
-		}
-	}
-	return 0, false
-}
-
-func (s *Server) SayHello(ctx context.Context, in *pb.Message) (*pb.Message, error) {
-	log.Printf("Receive message body from client: %s", in.Body)
-	return &pb.Message{Body: "Hello From the Server!"}, nil
-}
-
-func (s *Server) Register(ctx context.Context, in *pb.RegisterRequest) (*pb.RegisterResponse, error) {
-	if index, hasValue := s.hasValue(in.Body); hasValue {
-		err := pb.RpcGeneralError{Body: "User Already Exists"}
-		return &pb.RegisterResponse{Id: index, Error: &err}, nil
-	}
-
-	if s.data == nil {
-		s.data = make(map[uint32]string)
-	}
-	newId := uint32(len(s.data))
-	s.data[newId] = in.Body
-	return &pb.RegisterResponse{Id: newId}, nil
-}
-
-func (s *Server) List(ctx context.Context, in *pb.Empty) (*pb.ListResponse, error) {
-	return &pb.ListResponse{Records: s.data}, nil
+	s.data = append(s.data, *in)
+	ret_str := fmt.Sprintf("Saved. Total: %d", len(s.data))
+	return &pb.SaveResponse{Body: ret_str}, nil
 }
 
 func (s *Server) Init() {

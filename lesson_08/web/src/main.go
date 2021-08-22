@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	pb "github.com/AlekseiKanash/golang-course/lesson_08/proto"
 	"github.com/AlekseiKanash/golang-course/lesson_08/web/src/rest"
 	"github.com/AlekseiKanash/golang-course/lesson_08/web/src/store"
 )
@@ -52,7 +53,12 @@ func handleServerLifetime(server *rest.Server) int {
 				}
 			case "test\n":
 				{
-					store.Report()
+					request := &pb.SaveRequest{
+						Token:     "token",
+						CreatedAt: "date_c",
+						ExpiresAt: "date_e",
+					}
+					store.Save(request)
 				}
 			}
 		case <-time.After(1000 * time.Millisecond):

@@ -8,6 +8,10 @@ import (
 	"regexp"
 	"sync"
 	"text/template"
+	"time"
+
+	pb "github.com/AlekseiKanash/golang-course/lesson_08/proto"
+	"github.com/AlekseiKanash/golang-course/lesson_08/web/src/store"
 )
 
 var validPath = regexp.MustCompile("^/(user)/([a-zA-Z0-9]+)$")
@@ -94,6 +98,14 @@ func (s *Server) userHandler(w http.ResponseWriter, r *http.Request) {
 				address := r.PostFormValue("address")
 				cookie.Value = fmt.Sprintf("%s:%s", name, address)
 				http.SetCookie(w, cookie)
+
+				now := time.Now()
+				data := &pb.SaveRequest{
+					Token:     cookie.Name,
+					CreatedAt: now.String(),
+					ExpiresAt: now.Add(10 * 24 * time.Hour).String(),
+				}
+				store.Save(data)
 			}
 		}
 	default:
