@@ -11,7 +11,7 @@ import (
 )
 
 type ServerRegisterError struct {
-	string Message
+	Message string
 }
 
 func (sr ServerRegisterError) String() string {
@@ -39,7 +39,7 @@ func (s *Server) SayHello(ctx context.Context, in *pb.Message) (*pb.Message, err
 func (s *Server) Register(ctx context.Context, in *pb.RegisterRequest) (*pb.RegisterResponse, error) {
 	if index, hasValue := s.hasValue(in.Body); hasValue {
 		err := pb.RpcGeneralError{Body: "User Already Exists"}
-		return &pb.RegisterResponse{Id: index, Error: &err}, &err
+		return &pb.RegisterResponse{Id: index, Error: &err}, nil
 	}
 
 	if s.data == nil {
