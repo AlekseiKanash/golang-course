@@ -24,6 +24,7 @@ func getInput(input chan string) int {
 }
 
 func handleServerLifetime(server *rest.Server) int {
+	server.Start()
 	defer server.Stop()
 	input := make(chan string, 1)
 	go getInput(input)

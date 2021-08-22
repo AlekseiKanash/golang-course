@@ -11,3 +11,5 @@ cp ../generate_proto.sh build
 docker rmi web_service
 docker build \
          -t web_service .
+
+rm -rf build
