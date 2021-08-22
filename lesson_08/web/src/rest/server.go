@@ -65,11 +65,14 @@ func (s *Server) Start() {
 }
 
 func (s *Server) Stop() {
-	if err := s.server.Shutdown(context.TODO()); err != nil {
-		panic(err) // failure/timeout shutting down the server gracefully
+	if s.IsRunning {
+		if err := s.server.Shutdown(context.TODO()); err != nil {
+			panic(err) // failure/timeout shutting down the server gracefully
+		}
+
+		// wait for goroutine started in startHttpServer() to stop
+		s.wg.Wait()
 	}
-	// wait for goroutine started in startHttpServer() to stop
-	s.wg.Wait()
 }
 
 func (s *Server) userHandler(w http.ResponseWriter, r *http.Request) {

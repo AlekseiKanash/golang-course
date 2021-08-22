@@ -1,4 +1,4 @@
-module github.com/AlekseiKanash/golang-course/lesson_08/web
+module github.com/AlekseiKanash/golang-course/lesson_08
 
 go 1.16
 

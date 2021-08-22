@@ -6,8 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/AlekseiKanash/golang-course/lesson_08/web/src/rest"
-	"github.com/AlekseiKanash/golang-course/lesson_08/web/src/store"
+	"github.com/AlekseiKanash/golang-course/lesson_08/store/src/grpcstore"
 )
 
 func getInput(input chan string) int {
@@ -23,14 +22,13 @@ func getInput(input chan string) int {
 	}
 }
 
-func handleServerLifetime(server *rest.Server) int {
+func handleServerLifetime(server *grpcstore.Server) int {
 	defer server.Stop()
 	input := make(chan string, 1)
 	go getInput(input)
 
 	fmt.Println("Type exit to stop the server.")
 	for {
-
 		select {
 		case inputStr := <-input:
 			switch inputStr {
@@ -49,10 +47,6 @@ func handleServerLifetime(server *rest.Server) int {
 					server.Stop()
 					os.Exit(0)
 				}
-			case "test\n":
-				{
-					store.Report()
-				}
 			}
 		case <-time.After(1000 * time.Millisecond):
 			{
@@ -63,7 +57,7 @@ func handleServerLifetime(server *rest.Server) int {
 }
 
 func main() {
-	server := rest.Server{Addr: "0.0.0.0:80"}
+	server := grpcstore.Server{Addr: "0.0.0.0:9000"}
 	server.Init()
 	res := handleServerLifetime(&server)
 	os.Exit(res)

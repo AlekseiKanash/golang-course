@@ -14,8 +14,8 @@ COPY /build /app
 RUN /app/prepare_dependencies.sh
 RUN /app/generate_proto.sh
 
-WORKDIR /app/web/src
-RUN go build -o ../../_build/srv
+WORKDIR /app/store/src
+RUN go build -o ../_build/store
 
 ##
 ## Deploy
@@ -25,9 +25,8 @@ FROM golang:latest AS run
 
 WORKDIR /app
 
-COPY --from=build /app/_build/srv /app/
-COPY --from=build /app/web/src/user.html /app/
+COPY --from=build /app/store/_build/store /app/
 
-EXPOSE 80/tcp
+EXPOSE 9000/tcp
 
-CMD ["./srv"]
+CMD ["./store"]

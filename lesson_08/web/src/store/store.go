@@ -1,10 +1,11 @@
-package main
+package store
 
 import (
 	"context"
+	"fmt"
 	"log"
 
-	pb "github.com/AlekseiKanash/golang-course/lesson_07/proto"
+	pb "github.com/AlekseiKanash/golang-course/lesson_08/proto"
 	"google.golang.org/grpc"
 )
 
@@ -24,12 +25,13 @@ func list(c pb.EchoClient) {
 	log.Printf("Response from server: %v", reg_response.Records)
 }
 
-func main() {
+func Report() {
 
 	var conn *grpc.ClientConn
-	conn, err := grpc.Dial(":9000", grpc.WithInsecure())
+	conn, err := grpc.Dial("store:9000", grpc.WithInsecure())
 	if err != nil {
-		log.Fatalf("did not connect: %s", err)
+		fmt.Printf("did not connect: %s\n", err)
+		return
 	}
 	defer conn.Close()
 
@@ -37,7 +39,8 @@ func main() {
 
 	response, err := c.SayHello(context.Background(), &pb.Message{Body: "Hello From Client!"})
 	if err != nil {
-		log.Fatalf("Error when calling SayHello: %s", err)
+		fmt.Printf("Error when calling SayHello: %s\n", err)
+		return
 	}
 	log.Printf("Response from server: %s", response.Body)
 

@@ -1,25 +1,31 @@
-package main
+package grpcstore
 
 import (
 	"context"
 	"fmt"
 	"log"
 	"net"
+	"sync"
 
-	pb "github.com/AlekseiKanash/golang-course/lesson_07/proto"
+	pb "github.com/AlekseiKanash/golang-course/lesson_08/proto"
 	"google.golang.org/grpc"
 )
 
+type Server struct {
+	IsRunning bool
+	Addr      string
+	server    *grpc.Server
+	wg        *sync.WaitGroup
+	isInit    bool
+	data      map[uint32]string
+}
+
 type ServerRegisterError struct {
-	string Message
+	Message string
 }
 
 func (sr ServerRegisterError) String() string {
 	return fmt.Sprintf("%s", sr.Message)
-}
-
-type Server struct {
-	data map[uint32]string
 }
 
 func (s *Server) hasValue(value string) (uint32, bool) {
@@ -39,7 +45,7 @@ func (s *Server) SayHello(ctx context.Context, in *pb.Message) (*pb.Message, err
 func (s *Server) Register(ctx context.Context, in *pb.RegisterRequest) (*pb.RegisterResponse, error) {
 	if index, hasValue := s.hasValue(in.Body); hasValue {
 		err := pb.RpcGeneralError{Body: "User Already Exists"}
-		return &pb.RegisterResponse{Id: index, Error: &err}, &err
+		return &pb.RegisterResponse{Id: index, Error: &err}, nil
 	}
 
 	if s.data == nil {
@@ -54,17 +60,51 @@ func (s *Server) List(ctx context.Context, in *pb.Empty) (*pb.ListResponse, erro
 	return &pb.ListResponse{Records: s.data}, nil
 }
 
-func main() {
+func (s *Server) Init() {
+
+}
+
+func (s *Server) Start() {
+	if s.IsRunning {
+		fmt.Println("Already running.")
+		return
+	}
+
+	if nil == s.wg {
+		s.wg = &sync.WaitGroup{}
+	}
+
+	s.wg.Add(1)
+
+	fmt.Println("Starting GRPC server")
+
 	lis, err := net.Listen("tcp", ":9000")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	grpcServer := grpc.NewServer()
+	s.server = grpc.NewServer()
 
-	pb.RegisterEchoServer(grpcServer, &Server{})
+	pb.RegisterEchoServer(s.server, &Server{})
 
-	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %s", err)
+	go func(wg *sync.WaitGroup) {
+		defer fmt.Println("done")
+		defer wg.Done() // let main know we are done cleaning up
+
+		// always returns error. ErrServerClosed on graceful close
+		s.IsRunning = true
+		if err := s.server.Serve(lis); err != nil {
+			log.Fatalf("failed to serve: %s", err)
+		}
+		fmt.Printf("Server is stopped. %v\n", err)
+		s.IsRunning = false
+
+	}(s.wg)
+}
+
+func (s *Server) Stop() {
+	if s.IsRunning {
+		s.server.Stop()
+		s.wg.Wait()
 	}
 }

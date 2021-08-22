@@ -1,13 +1,13 @@
 #!/bin/bash
 rm -rf build
-mkdir -p build/web/src
+mkdir -p build/store
 cp ../go.* build
-cp -rf src build/web
+cp -rf src build/store
 
 cp -rf ../proto build
 cp ../prepare_dependencies.sh build
 cp ../generate_proto.sh build
 
-docker rmi web_service
+docker rmi store_service
 docker build \
-         -t web_service .
+         -t store_service .
