@@ -1,0 +1,21 @@
+How to build images:
+cd lesson-10
+./build_images
+
+docker compose: docker-compose up -d
+docker compose: docker-compose stop
+
+postgres setup:
+mkdir $HOME/docker/volumes/postgres
+
+slack bot setup:
+copy .env file to ~/.slack/ directory and fill it there
+For slack bot - use this article as an example https://towardsdatascience.com/develop-a-slack-bot-using-golang-1025b3e606bc
+Slash commands:
+Get last known temperature for a city
+/weather get <city>
+Get all known weathers for all cities
+/weather list
+Go to openweather privider, get weather for a city and save it in DB
+/weather fetch <city>
+For openweather - register here https://openweathermap.org and get the token
