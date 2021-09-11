@@ -1,0 +1,8 @@
+How to build images:
+cd lesson-08
+./build_images
+
+dockerhub alekseikanash
+run using docker compose: docker-compose up -d
+stup using docker compose: docker-compose stop
+
