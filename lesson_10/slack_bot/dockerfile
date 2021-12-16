@@ -1,0 +1,26 @@
+##
+## Build
+##
+
+FROM golang:latest AS build
+
+WORKDIR /app
+
+COPY /build /app
+
+RUN /app/prepare_dependencies.sh
+
+WORKDIR /app/slack_bot/src
+RUN go build -o ../../_build/bot
+
+##
+## Deploy
+##
+
+FROM golang:latest AS run
+
+WORKDIR /app
+
+COPY --from=build /app/_build/bot /app/
+
+CMD ["./bot"]

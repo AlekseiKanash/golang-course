@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS weather (
+    id SERIAL PRIMARY KEY,
+    city VARCHAR(80) NOT NULL,
+    temperature FLOAT NOT NULL
+);
